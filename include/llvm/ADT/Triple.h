@@ -76,7 +76,8 @@ public:
     amdil,      // amdil: amd IL
     spir,       // SPIR: standard portable IR for OpenCL 32-bit version
     spir64,     // SPIR: standard portable IR for OpenCL 64-bit version
-    kalimba     // Kalimba: generic kalimba
+    kalimba,    // Kalimba: generic kalimba
+    y86         // Y86: educational architecture inspired by X86
   };
   enum SubArchType {
     NoSubArch,
