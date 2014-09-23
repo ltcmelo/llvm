@@ -174,12 +174,12 @@ def POPL : StackManip<0xB0, R,
 
 def ADDL : ArithLogic<0x60, R,
                       (outs GPR:$dst), (ins GPR:$src1, GPR:$src2),
-                      "add $src1, $src2",
+                      "addl $src1, $src2",
                       []>;
 
 def SUBL : ArithLogic<0x61, R,
                       (outs GPR:$dst), (ins GPR:$src1, GPR:$src2),
-                      "sub $src1, $src2",
+                      "subl $src1, $src2",
                       []>;
 
 // ADJCALLSTACKDOWN/UP implicitly use/def RSP because they may be expanded into
