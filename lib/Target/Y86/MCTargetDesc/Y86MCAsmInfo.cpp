@@ -16,11 +16,16 @@
 using namespace llvm;
 
 Y86MCAsmInfo::Y86MCAsmInfo(StringRef TT) {
-  Data16bitsDirective = "\t.half\t";
-  Data32bitsDirective = "\t.word\t";
+  Data8bitsDirective = "\t.byte\t";
+  Data16bitsDirective = "\t.word\t";
+  Data32bitsDirective = "\t.long\t";
   Data64bitsDirective = nullptr;
 
-  // Directive ORG -> POS ?
+  HasDotTypeDotSizeDirective = false;
+  HasSingleParameterDotFile = false;
+
+  // TODO: We should have a HasGlobalDirective as well.
+  GlobalDirective = "# [Global Symbol] ";
 }
 
 void Y86MCAsmInfo::anchor() {}

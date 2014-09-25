@@ -14,6 +14,7 @@
 #include "Y86MCTargetDesc.h"
 #include "Y86MCAsmInfo.h"
 #include "InstPrinter/Y86MCInstPrinter.h"
+#include "MCTargetDesc/Y86MCTargetStreamer.h"
 #include "llvm/MC/MCInstrInfo.h"
 #include "llvm/MC/MCRegisterInfo.h"
 #include "llvm/MC/MCStreamer.h"
@@ -34,39 +35,62 @@ using namespace llvm;
 #include "Y86GenSubtargetInfo.inc"
 
 
-static MCAsmInfo *createY86MCAsmInfo(const MCRegisterInfo &MRI, StringRef TT) {
+static MCAsmInfo *createMCAsmInfo(const MCRegisterInfo &MRI,
+                                  StringRef TT) {
   return new Y86MCAsmInfo(TT);
 }
 
-static MCStreamer *createMCStreamer(const Target &T, StringRef TT,
-                                    MCContext &Ctx, MCAsmBackend &MAB,
-                                    raw_ostream &_OS,
-                                    MCCodeEmitter *_Emitter,
-                                    const MCSubtargetInfo &STI,
-                                    bool RelaxAll,
-                                    bool NoExecStack) {
-  return createELFStreamer(Ctx, MAB, _OS, _Emitter, RelaxAll, NoExecStack);
+static MCStreamer *createMCAsmStreamer(MCContext &Ctx,
+                                       formatted_raw_ostream &OS,
+                                       bool isVerboseAsm,
+                                       bool useDwarfDirectory,
+                                       MCInstPrinter *InstPrint,
+                                       MCCodeEmitter *CE,
+                                       MCAsmBackend *TAB,
+                                       bool ShowInst) {
+  MCStreamer *S =
+      llvm::createAsmStreamer(Ctx, OS, isVerboseAsm, useDwarfDirectory,
+                              InstPrint, CE, TAB, ShowInst);
+  new Y86MCAsmTargetStreamer(*S, OS);
+  return S;
 }
 
-static MCInstPrinter *createY86MCInstPrinter(const Target &T,
-                                             unsigned SyntaxVariant,
-                                             const MCAsmInfo &MAI,
-                                             const MCInstrInfo &MII,
-                                             const MCRegisterInfo &MRI,
-                                             const MCSubtargetInfo &STI) {
+/*
+static MCStreamer *createMCObjectStreamer(const Target &T, StringRef TT,
+                                          MCContext &Ctx, MCAsmBackend &MAB,
+                                          raw_ostream &_OS,
+                                          MCCodeEmitter *_Emitter,
+                                          const MCSubtargetInfo &STI,
+                                          bool RelaxAll,
+                                          bool NoExecStack) {
+  return 0;
+}
+*/
+
+static MCInstPrinter *createMCInstPrinter(const Target &T,
+                                          unsigned SyntaxVariant,
+                                          const MCAsmInfo &MAI,
+                                          const MCInstrInfo &MII,
+                                          const MCRegisterInfo &MRI,
+                                          const MCSubtargetInfo &STI) {
   return new Y86MCInstPrinter(MAI, MII, MRI);
 }
 
 //===----------------------------------------------------------------------===//
 
 extern "C" void LLVMInitializeY86TargetMC() {
-  // Register the MC asm info.
-  RegisterMCAsmInfoFn A(TheY86Target, createY86MCAsmInfo);
+  // Register general target asm information.
+  RegisterMCAsmInfoFn A(TheY86Target, createMCAsmInfo);
 
-  // Register the object streamer.
-  TargetRegistry::RegisterMCObjectStreamer(TheY86Target,
-                                           createMCStreamer);
-  // Register the MCInstPrinter.
+  // Register the asm streamer.
+  TargetRegistry::RegisterAsmStreamer(TheY86Target,
+                                      createMCAsmStreamer);
+
+  // Register the oject streamer.
+  /*TargetRegistry::RegisterMCObjectStreamer(TheY86Target,
+                                           createMCObjectStreamer);*/
+
+  // Register the instruction printer.
   TargetRegistry::RegisterMCInstPrinter(TheY86Target,
-                                        createY86MCInstPrinter);
+                                        createMCInstPrinter);
 }

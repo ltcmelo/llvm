@@ -18,8 +18,10 @@ namespace llvm {
 class LLVM_LIBRARY_VISIBILITY Y86AsmPrinter : public AsmPrinter {
 public:
   explicit Y86AsmPrinter(TargetMachine &TM, MCStreamer &Streamer)
-      : AsmPrinter(TM, Streamer) {
-  }
+      : AsmPrinter(TM, Streamer) {}
+
+  void EmitStartOfAsmFile(Module &M) override;
+  void EmitEndOfAsmFile(Module &M) override;
 
   void EmitInstruction(const MachineInstr *MI) override;
 
