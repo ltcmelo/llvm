@@ -19,7 +19,6 @@ public:
   Y86MCTargetStreamer(MCStreamer &S);
 
   virtual void emitDirectivePos(unsigned Address) = 0;
-  virtual void emitStartupCode() = 0;
 };
 
 class Y86MCAsmTargetStreamer : public Y86MCTargetStreamer {
@@ -27,7 +26,6 @@ public:
   Y86MCAsmTargetStreamer(MCStreamer &S, formatted_raw_ostream &OS);
 
   void emitDirectivePos(unsigned Address) override;
-  void emitStartupCode() override;
 
 private:
   formatted_raw_ostream &OS;

@@ -23,7 +23,3 @@ Y86MCAsmTargetStreamer::Y86MCAsmTargetStreamer(MCStreamer &S,
 void Y86MCAsmTargetStreamer::emitDirectivePos(unsigned Address) {
   OS << "\t.pos " << Address << "\n";
 }
-
-void Y86MCAsmTargetStreamer::emitStartupCode() {
-  OS << "\t# TODO: Startup code...\n";
-}
