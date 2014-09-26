@@ -48,7 +48,7 @@ void Y86MCInstPrinter::printOperand(const MCInst *MI, int OpNo, raw_ostream &OS)
     OS << '$' << formatImm((int64_t)Op.getImm());
   } else {
     assert(Op.isExpr() && "unknown operand kind in printOperand");
-    OS << '$' << *Op.getExpr();
+    OS << *Op.getExpr();
   }
 }
 
