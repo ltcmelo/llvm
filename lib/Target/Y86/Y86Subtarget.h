@@ -61,13 +61,15 @@ public:
   bool is32Bit() const { return In32BitMode; }
   bool is64Bit() const { return !In32BitMode; }
 
+  unsigned getInitialStackLocation() const { return InitialStackLocation; }
+
 private:
   bool In32BitMode;
-
-  // Calculates type size & alignment.
-  const DataLayout DL;
-
+  unsigned InitialStackLocation; // Initial stack location.
+  const DataLayout DL; // Calculates type size & alignment.
   Y86InstrInfo InstrInfo;
+
+  // Lowering...
   Y86FrameLowering FrameLowering;
   Y86TargetLowering TargetLowering;
 };

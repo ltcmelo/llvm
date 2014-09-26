@@ -47,6 +47,7 @@ Y86Subtarget::Y86Subtarget(const std::string &TT,
                            TargetMachine &TM)
     : Y86GenSubtargetInfo(TT, CPU, FS)
     , In32BitMode(true)
+    , InitialStackLocation(0x400)
     , DL(computeDataLayout(*this))
     , InstrInfo(*this)
     , FrameLowering(*this)
