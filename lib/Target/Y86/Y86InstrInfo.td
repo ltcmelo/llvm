@@ -96,7 +96,7 @@ def WriteZero : SchedWrite;
 
 include "Y86InstrFormats.td"
 
-def HLT : FlowControl<0x00, T, (outs), (ins), "hlt", []>;
+def HALT : FlowControl<0x00, T, (outs), (ins), "halt", []>;
 
 let hasSideEffects = 0,
     SchedRW = [WriteZero] in {
